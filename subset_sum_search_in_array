@@ -1,0 +1,41 @@
+#include <stdio.h>
+
+
+int is_subset_sum_possible(int *a, int sum,int n)
+{
+	int i,j;
+	int is_sub_sum[sum+1][n+1];
+	for(i=0;i<=sum;i++)
+	{
+		is_sub_sum[i][0] = 0;
+	}
+	for(i=0;i<=n;i++)
+	{
+		is_sub_sum[0][i] = 1;
+	}
+	for(i=0;i<=sum;i++)
+	{
+		for(j=1;j<=n;j++)
+		{
+			if(a[j-1] <= i)
+			{
+				is_sub_sum[i][j] = (is_sub_sum[i-a[j-1]][j-1] || is_sub_sum[i][j-1]);
+			}
+			else
+			{
+				is_sub_sum[i][j] = is_sub_sum[i][j-1];
+			}
+		}
+	}
+	return is_sub_sum[sum][n];
+}
+
+
+int main()
+{
+	int a[] = {3, 34, 4, 12, 5, 2};
+	int sum;
+	printf("enter the subset sum that you want to search in the array");
+	scanf("%d",&sum);
+	printf(" is subset sum of %d present in the array %d",sum,is_subset_sum_possible(a,sum,6));
+}
