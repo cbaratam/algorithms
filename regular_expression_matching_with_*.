@@ -1,0 +1,74 @@
+#include <stdio.h>
+#include <stdbool.h>
+bool is_match(char a,char b)
+{
+	if(a == '.')
+	{
+		return true;
+	}
+	else if(a == b)
+	{
+		return true;
+	}
+	return false;
+}
+bool strings_match(char *s, char *p, int n, int m)
+{
+	if(m==0 && n==0)
+	{
+		return true;
+	}
+	if(m==0)
+	{
+		return false;
+	}
+	if(n==0)
+	{
+		if(p[m-1] == '*')
+		{
+			
+			return strings_match(s,p,n,m-2);
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	if(p[m-1] == '.')
+	{
+		return strings_match(s,p,n-1,m-1);
+	}
+	else if(p[m-1] == '*')
+	{
+		if(is_match(p[m-2],s[n-1]))
+		{
+			return (strings_match(s,p,n-1,m) || strings_match(s,p,n,m-2));
+		}
+		else
+		{
+			return strings_match(s,p,n,m-2);
+		}
+	}
+	else
+	{
+		if(p[m-1] != s[n-1])
+		{
+			return false;
+		}
+		else
+		{
+			return strings_match(s,p,n-1,m-1);
+		}
+	}
+}
+int main()
+{
+	char *s,*p;
+	s = (char*)malloc(1000);
+	p = (char*)malloc(1000);
+	printf("enter the first string\n");
+	scanf("%s",s);
+	printf("enter the second string\n");
+	scanf("%s",p);
+	printf("both the strings match? %d",strings_match(s,p,strlen(s),strlen(p)));	
+}
